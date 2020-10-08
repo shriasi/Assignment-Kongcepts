@@ -1,5 +1,4 @@
 # Assignment - Kongcepts
-####Assignment - Kongcepts
 
 This repository contains a sample CRUD application developed using React, Express and MongoDB.
 
@@ -34,3 +33,6 @@ Run the UI client
 cd Frontend
 npm start
 ```
+
+## Sample UI
+![Login]("https://github.com/asirihewage/Assignment-Kongcepts/blob/main/res/login.png")
