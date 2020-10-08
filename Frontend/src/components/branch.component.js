@@ -14,11 +14,37 @@ export default class Branch extends Component {
             branch_name: "",
             branch_id: "",
             bank : "",
-            branches : []
+            branches : [],
+            banks : []
         };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeBranchId = this.handleChangeBranchId.bind(this);
+        this.handleChangeBranchName = this.handleChangeBranchName.bind(this);
+        this.handleChangeBank = this.handleChangeBank.bind(this);
 
     }
 
+    // handle change bank_id
+    handleChangeBranchId(event) {
+        this.setState({
+            branch_id: event.target.value
+        });
+    }
+
+    // handle change bank_name
+    handleChangeBranchName(event) {
+        this.setState({
+            branch_name: event.target.value
+        });
+    }
+
+    // handle change bank_description
+    handleChangeBank(event) {
+        this.setState({
+            bank: event.target.value
+        });
+    }
 
     // fill list of banks available
     componentDidMount() {
@@ -28,29 +54,40 @@ export default class Branch extends Component {
                 this.setState({ branches: branches});
             })
             .catch(err => {
-                alert('bank data retrieval error ' + err.toString());
+                console.log('branch data retrieval error ' + err.toString());
+            })
+
+        axios.get(`${apiUrl}/bank/`)
+            .then(res => {
+                const banks = res.data.data;
+                this.setState({ banks: banks});
+            })
+            .catch(err => {
+                console.log('bank data retrieval error ' + err.toString());
             })
     }
 
     //submit data
     handleSubmit(event) {
         event.preventDefault();
-        axios.post(`${apiUrl}/auth/register`, {
-            bank_id: this.state.bank_id,
-            bank_name: this.state.bank_name,
-            bank_description: this.state.bank_description
+        axios.post(`${apiUrl}/branch`, {
+            branch_id: this.state.branch_id,
+            branch_name: this.state.branch_name,
+            bank: this.state.bank
         })
             .then((response) => {
                 response.json();
-                alert('Bank data submitted ');
+                console.log('Branch data submitted ');
             }, (error) => {
-                alert('Bank data submission error ' + this.state.bank_name + error.toString());
+                console.log('Branch data submission error ' + this.state.branch_name + error.toString());
             });
     }
 
     render() {
 
         const { branches } = this.state;
+
+        const { banks } = this.state;
 
         return (
             <div className="tableView" >
@@ -59,30 +96,33 @@ export default class Branch extends Component {
                     <div className="row">
                         <div className="col-6">
                             <div className="form-group">
-                                <label>Email address</label>
-                                <input type="email" name="emp_email"  className="form-control" placeholder="Enter email" />
+                                <label>Branch ID</label>
+                                <input type="number" name="branch_id"  required value={this.state.branch_id} onChange={e => this.handleChangeBranchId(e)} className="form-control" placeholder="Enter branch ID" />
                             </div>
 
                             <div className="form-group">
-                                <label>Password</label>
-                                <input type="password" name="emp_password" className="form-control" placeholder="Enter password" />
+                                <label>Branch name</label>
+                                <input type="text" name="branch_name"  required value={this.state.branch_name} onChange={e => this.handleChangeBranchName(e)} className="form-control" placeholder="Enter branch name" />
                             </div>
+
+
                         </div>
                         <div className="col-6">
                             <div className="form-group">
-                                <label>Email address</label>
-                                <input type="email" name="emp_email"  className="form-control" placeholder="Enter email" />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Password</label>
-                                <input type="password" name="emp_password" className="form-control" placeholder="Enter password" />
+                                <label>Bank</label>
+                                <select  required className="form-control" onChange={e => this.handleChangeBank(e)}>
+                                    {banks &&
+                                    banks.length > 0 &&
+                                    banks.map(bank => {
+                                        return <option key={bank._id} value={bank._id}>{bank.bank_name}</option>;
+                                    })}
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div className="row">
                             <div className="col-4">
-                                <button type="submit" className="btn btn-primary btn-block">Add Branch</button>
+                                <button type="submit" onClick={this.handleSubmit}  className="btn btn-primary btn-block">Add Branch</button>
                             </div>
                             <div className="col-4">
                                 <button type="submit" className="btn btn-info btn-block">Update Branch</button>
