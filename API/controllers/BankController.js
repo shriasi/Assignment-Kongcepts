@@ -8,6 +8,7 @@ mongoose.set("useFindAndModify", false);
 
 // Bank Schema
 function BankData(data) {
+	this.id = data._id
 	this.bank_name= data.bank_name;
 	this.bank_description = data.bank_description;
 	this.bank_id = data.bank_id;
@@ -48,15 +49,15 @@ exports.bankDetail = [
 	// auth,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-			return apiResponse.successResponseWithData(res, "Operation success", {});
+			return apiResponse.successResponseWithData(res, "Operation success" + req.params.id, {});
 		}
 		try {
-			Bank.findOne({_id: req.params.id},"_id bank_name bank_description bank_id createdAt").then((bank)=>{
+			Bank.findOne({_id: ObjectId(req.params.id)},"_id bank_name bank_description bank_id createdAt").then((bank)=>{
 				if(bank !== null){
 					let bankData = new BankData(bank);
-					return apiResponse.successResponseWithData(res, "Operation success", bankData);
+					return apiResponse.successResponseWithData(res, "Operation success"+ req.params.id, bankData);
 				}else{
-					return apiResponse.successResponseWithData(res, "Operation success", {});
+					return apiResponse.successResponseWithData(res, "Operation success" + req.params.id, {});
 				}
 			});
 		} catch (err) {
@@ -155,10 +156,12 @@ exports.bankUpdate = [
 						if(foundBank === null){
 							return apiResponse.notFoundResponse(res,"Bank not exists with this id");
 						}else{
+
 							//Check authorized employee
 							if(foundBank._id.toString() !== req.params.id){
 								return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 							}else{
+
 								//update bank.
 								Bank.findByIdAndUpdate(req.params.id, bank, {},function (err) {
 									if (err) { 
@@ -198,10 +201,12 @@ exports.bankDelete = [
 				if(foundBank === null){
 					return apiResponse.notFoundResponse(res,"Bank not exists with this id");
 				}else{
+
 					//Check authorized employee
 					if(foundBank._id.toString() !== req.params.id){
 						return apiResponse.unauthorizedResponse(res, "You are not authorized to do this operation.");
 					}else{
+
 						//delete bank.
 						Bank.findByIdAndRemove(req.params.id,function (err) {
 							if (err) { 

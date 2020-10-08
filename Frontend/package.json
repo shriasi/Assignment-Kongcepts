@@ -1,0 +1,34 @@
+{
+  "name": "assignment-kongcepts",
+  "version": "1.0.0",
+  "author": "Asiri H.",
+  "description": "Sample project created for the assignment - kongcepts",
+  "repository": "https://github.com/asirihewage/Assignment-Kongcepts",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.20.0",
+    "bootstrap": "^4.5.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "proxy": "http://localhost:3001",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ]
+  },
+  "devDependencies": {
+    "react-bootstrap": "^1.3.0"
+  }
+}
