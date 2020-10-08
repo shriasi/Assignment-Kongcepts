@@ -25,28 +25,28 @@ export default class Branch extends Component {
 
     }
 
-    // handle change bank_id
+    // handle change branch_id
     handleChangeBranchId(event) {
         this.setState({
             branch_id: event.target.value
         });
     }
 
-    // handle change bank_name
+    // handle change branch_name
     handleChangeBranchName(event) {
         this.setState({
             branch_name: event.target.value
         });
     }
 
-    // handle change bank_description
+    // handle change bank
     handleChangeBank(event) {
         this.setState({
             bank: event.target.value
         });
     }
 
-    // fill list of banks available
+    // fill the table of branches and fill banks drop down
     componentDidMount() {
         axios.get(`${apiUrl}/branch/`)
             .then(res => {

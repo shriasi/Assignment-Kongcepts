@@ -13,6 +13,7 @@ function BranchData(data) {
     this.branch_location = data.branch_location;
     this.branch_id = data.branch_id;
     this.createdAt = data.createdAt;
+    this.bank =  mongoose.Types.ObjectId(data.bank);
 }
 
 /**
@@ -48,7 +49,7 @@ exports.branchListForBank = [
     function (req, res) {
         try {
             const bankObjId = new ObjectID(req.params.id);
-            Branch.find({bank: bankObjId },"_id branch_id branch_name branch_description bank createdAt").then((branchs)=>{
+            Branch.find({bank: bankObjId },"_id branch_id branch_name branch_description bank createdAt").populate("bank").then((branchs)=>{
                 if(branchs.length > 0){
                     return apiResponse.successResponseWithData(res, "Operation success", branchs);
                 }else{
@@ -120,7 +121,7 @@ exports.branchSave = [
                 { branch_name: req.body.branch_name,
                     branch_id: req.body.branch_id,
                     branch_location: req.body.branch_location,
-                    bank: mongoose.Types.ObjectId(req.body.bank)
+                    bank: req.body.bank
                 });
 
             if (!errors.isEmpty()) {
@@ -168,7 +169,8 @@ exports.branchUpdate = [
             var branch = new Branch(
                 { branch_name: req.body.branch_name,
                     branch_location: req.body.branch_location,
-                    branch_id:req.params.branch_id
+                    branch_id:req.params.branch_id,
+                    bank: mongoose.Types.ObjectId(req.params.bank)
                 });
 
             if (!errors.isEmpty()) {
