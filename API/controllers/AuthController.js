@@ -52,8 +52,10 @@ exports.register = [
 			}else {
 				//hash input password
 				bcrypt.hash(req.body.emp_password,10,function(err, hash) {
+
 					// generate OTP for confirmation
 					let otp = utility.randomNumber(4);
+
 					// Create Employee object with escaped and trimmed data
 					var employee = new EmployeeModel(
 						{
@@ -62,9 +64,11 @@ exports.register = [
 							emp_photo: req.body.emp_photo,
 							emp_email: req.body.emp_email,
 							emp_password: hash,
-							bank_branch: req.body.bank_branch
+							bank_branch:  ObjectId(req.body.bank_branch),
+							bank: ObjectId(req.body.bank)
 						}
 					);
+
 					// Save employee.
 					employee.save(function (err) {
 						if (err) { return apiResponse.ErrorResponse(res, err); }
@@ -74,7 +78,8 @@ exports.register = [
 							emp_photo: employee.emp_photo,
 							emp_email: employee.emp_email,
 							emp_password: employee.emp_password,
-							bank_branch: employee.bank_branch
+							bank_branch: employee.bank_branch,
+							bank: employee.bank
 						};
 						return apiResponse.successResponseWithData(res,"Registration Success.", employeeData);
 					});
@@ -108,6 +113,7 @@ exports.login = [
 			}else {
 				EmployeeModel.findOne({emp_email : req.body.emp_email}).then(employee => {
 					if (employee) {
+
 						//Compare given password with db's hash.
 						bcrypt.compare(req.body.emp_password,employee.emp_password,function (err,same) {
 							if(same){
@@ -116,12 +122,14 @@ exports.login = [
 											emp_name: employee.emp_name,
 											emp_email: employee.emp_email,
 										};
+
 										//Prepare JWT token for authentication
 										const jwtPayload = employeeData;
 										const jwtData = {
 											expiresIn: process.env.JWT_TIMEOUT_DURATION,
 										};
 										const secret = process.env.JWT_SECRET;
+
 										//Generated JWT token with Payload and secret.
 										employeeData.token = jwt.sign(jwtPayload, secret, jwtData);
 										return apiResponse.successResponseWithData(res,"Login Success.", employeeData);

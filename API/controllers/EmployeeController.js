@@ -53,7 +53,7 @@ exports.employeeDetail = [
             return apiResponse.successResponseWithData(res, "Operation success", {});
         }
         try {
-            Employee.findOne({_id: req.params.id, emp_id: req.emp_id},"_id emp_name emp_email emp_photo emp_id bank_branch createdAt").then((employee)=>{
+            Employee.findById(req.params.id,"_id emp_name emp_email emp_photo emp_id bank_branch createdAt").then((employee)=>{
                 if(employee !== null){
                     let employeeData = new EmployeeData(employee);
                     return apiResponse.successResponseWithData(res, "Operation success", employeeData);

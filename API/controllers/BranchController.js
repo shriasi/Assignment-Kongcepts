@@ -4,6 +4,7 @@ const { sanitizeBody } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../helpers/jwt");
 var mongoose = require("mongoose");
+const ObjectID = require("mongoose");
 mongoose.set("useFindAndModify", false);
 
 // Branch Schema
@@ -23,7 +24,7 @@ exports.branchList = [
     // auth,
     function (req, res) {
         try {
-            Branch.find({},"branch_id branch_name branch_description bank createdAt").then((branchs)=>{
+            Branch.find({},"_id, branch_id branch_name branch_description bank createdAt").then((branchs)=>{
                 if(branchs.length > 0){
                     return apiResponse.successResponseWithData(res, "Operation success", branchs);
                 }else{
@@ -38,6 +39,31 @@ exports.branchList = [
 ];
 
 /**
+ * Branch List for a specific bank.
+ *
+ * @returns {Object}
+ */
+exports.branchListForBank = [
+    // auth,
+    function (req, res) {
+        try {
+            const bankObjId = new ObjectID(req.params.id);
+            Branch.find({bank: bankObjId },"_id branch_id branch_name branch_description bank createdAt").then((branchs)=>{
+                if(branchs.length > 0){
+                    return apiResponse.successResponseWithData(res, "Operation success", branchs);
+                }else{
+                    return apiResponse.successResponseWithData(res, "Operation success", []);
+                }
+            });
+        } catch (err) {
+            //throw error in json response with status 500.
+            return apiResponse.ErrorResponse(res, err);
+        }
+    }
+];
+
+
+/**
  * Branch Detail.
  *
  * @param {string}      id
@@ -48,15 +74,15 @@ exports.branchDetail = [
     // auth,
     function (req, res) {
         if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-            return apiResponse.successResponseWithData(res, "Operation success", {});
+            return apiResponse.successResponseWithData(res, "id is invalid"+ req.params.id, {});
         }
         try {
-            Branch.findOne({_id: req.params.id},"branch_id branch_name branch_description bank createdAt").then((branch)=>{
+            Branch.findOne({_id: ObjectId(req.params.id)},"_id branch_id branch_name branch_description bank createdAt").then((branch)=>{
                 if(branch !== null){
                     let branchData = new BranchData(branch);
-                    return apiResponse.successResponseWithData(res, "Operation success", branchData);
+                    return apiResponse.successResponseWithData(res, "Operation success"+ req.params.id, branchData);
                 }else{
-                    return apiResponse.successResponseWithData(res, "Operation success", {});
+                    return apiResponse.successResponseWithData(res, "Operation success"+ req.params.id, {});
                 }
             });
         } catch (err) {
@@ -142,7 +168,6 @@ exports.branchUpdate = [
             var branch = new Branch(
                 { branch_name: req.body.branch_name,
                     branch_location: req.body.branch_location,
-                    branch_name: req.body.branch_name,
                     branch_id:req.params.branch_id
                 });
 
