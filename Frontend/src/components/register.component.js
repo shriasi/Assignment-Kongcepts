@@ -99,7 +99,7 @@ export default class SignUp extends Component {
                 this.setState({ banks: banks});
             })
             .catch(err => {
-                alert('bank data retrieval error ' + err.toString());
+                console.log('bank data retrieval error ' + err.toString());
             })
     }
 
@@ -117,9 +117,9 @@ export default class SignUp extends Component {
         })
             .then((response) => {
                 response.json();
-                alert('User data submitted ');
+                console.log('User data submitted ');
             }, (error) => {
-                alert('User data submission error ' + this.state.emp_email + error.toString());
+                console.log('User data submission error ' + this.state.emp_email + error.toString());
             });
     }
 

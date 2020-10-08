@@ -38,7 +38,7 @@ export default class Login extends Component {
             .then((response) => {
                 localStorage.setItem('token', response.token);
             }, (error) => {
-                alert('User data submission error ' + error.toString());
+                console.log('User data submission error ' + error.toString());
             });
 
         event.preventDefault();

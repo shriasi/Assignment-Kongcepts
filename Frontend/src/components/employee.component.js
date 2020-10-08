@@ -25,7 +25,7 @@ export default class Employee extends Component {
                 this.setState({ employees: emps});
             })
             .catch(err => {
-                alert('bank data retrieval error ' + err.toString());
+                console.log('bank data retrieval error ' + err.toString());
             })
     }
 
@@ -94,11 +94,11 @@ export default class Employee extends Component {
                                 return <tr key={emp._id}>
                                     <td>{emp._id}</td>
                                     <td>{emp.emp_id}</td>
-                                    <td>{emp.emp_photo}</td>
+                                    <td><img src={emp.emp_photo.toString()} width="64px" /></td>
                                     <td>{emp.emp_name}</td>
                                     <td>{emp.emp_email}</td>
                                     <td>{emp.bank}</td>
-                                    <td>{emp.branch}</td>
+                                    <td>{emp.bank_branch.branch_name}</td>
                                 </tr> ;
                             })}
 

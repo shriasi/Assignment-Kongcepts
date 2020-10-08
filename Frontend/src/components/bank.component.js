@@ -52,7 +52,7 @@ export default class Bank extends Component {
                 this.setState({ banks: banks});
             })
             .catch(err => {
-                alert('bank data retrieval error ' + err.toString());
+                console.log('bank data retrieval error ' + err.toString());
             })
     }
 
@@ -66,9 +66,9 @@ export default class Bank extends Component {
         })
             .then((response) => {
                 response.json();
-                alert('Bank data submitted ');
+                console.log('Bank data submitted ');
             }, (error) => {
-                alert('Bank data submission error ' + this.state.bank_name + error.toString());
+                console.log('Bank data submission error ' + this.state.bank_name + error.toString());
             });
     }
 
