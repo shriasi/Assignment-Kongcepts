@@ -19,8 +19,6 @@ const mongoose = require("mongoose");
  */
 exports.register = [
 	// validation
-!mongoose.Types.ObjectId.isValid(body("bank")).withMessage("Object ID bank is invalid"),
-!mongoose.Types.ObjectId.isValid(body("bank_branch")).withMessage("Object ID bank_branch is invalid"),
 	body("emp_name").isLength({ min: 1 }).trim().withMessage("Employee name must be specified."),
 	body("emp_email").isLength({ min: 1 }).trim().withMessage("Employee's email must be specified.")
 		.isEmail().withMessage("Employee's email must be a valid email address.").custom((value) => {
