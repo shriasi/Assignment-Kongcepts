@@ -35,4 +35,4 @@ npm start
 ```
 
 ## Sample UI
-![Login]("https://github.com/asirihewage/Assignment-Kongcepts/blob/main/res/login.png")
+![Login](res/login.png)
