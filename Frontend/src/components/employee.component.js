@@ -97,8 +97,8 @@ export default class Employee extends Component {
                                     <td><img src={emp.emp_photo.toString()} width="64px" /></td>
                                     <td>{emp.emp_name}</td>
                                     <td>{emp.emp_email}</td>
-                                    <td>{emp.bank}</td>
-                                    <td>{emp.bank_branch.branch_name}</td>
+                                    <td>{emp.bank.bank_name}</td>
+                                    <td>{emp.bank_branch}</td>
                                 </tr> ;
                             })}
 
