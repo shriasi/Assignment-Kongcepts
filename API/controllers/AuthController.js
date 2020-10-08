@@ -5,6 +5,7 @@ const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 /**
  * Employee registration.
@@ -18,6 +19,8 @@ const jwt = require("jsonwebtoken");
  */
 exports.register = [
 	// validation
+!mongoose.Types.ObjectId.isValid(body("bank")).withMessage("Object ID bank is invalid"),
+!mongoose.Types.ObjectId.isValid(body("bank_branch")).withMessage("Object ID bank_branch is invalid"),
 	body("emp_name").isLength({ min: 1 }).trim().withMessage("Employee name must be specified."),
 	body("emp_email").isLength({ min: 1 }).trim().withMessage("Employee's email must be specified.")
 		.isEmail().withMessage("Employee's email must be a valid email address.").custom((value) => {
@@ -64,8 +67,8 @@ exports.register = [
 							emp_photo: req.body.emp_photo,
 							emp_email: req.body.emp_email,
 							emp_password: hash,
-							bank_branch:  ObjectId(req.body.bank_branch),
-							bank: ObjectId(req.body.bank)
+							bank_branch:  mongoose.Types.ObjectId(req.body.bank_branch),
+							bank: mongoose.Types.ObjectId(req.body.bank)
 						}
 					);
 

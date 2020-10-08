@@ -13,7 +13,8 @@ function EmployeeData(data) {
     this.emp_email = data.emp_email;
     this.emp_id = data.emp_id;
     this.createdAt = data.createdAt;
-    this.bank_branch = data.bank_branch;
+    this.bank_branch = mongoose.Types.ObjectId(data.bank_branch);
+    this.bank = mongoose.Types.ObjectId(data.bank);
 }
 
 /**
@@ -25,7 +26,7 @@ exports.employeeList = [
     // auth,
     function (req, res) {
         try {
-            Employee.find({},"_id emp_name emp_email emp_photo emp_id bank_branch createdAt").then((employees)=>{
+            Employee.find({},"_id emp_name emp_email emp_photo emp_id bank bank_branch createdAt").populate("bank").then((employees)=>{
                 if(employees.length > 0){
                     return apiResponse.successResponseWithData(res, "Operation success", employees);
                 }else{
@@ -100,7 +101,8 @@ exports.employeeUpdate = [
                     emp_id: req.body.emp_id,
                     emp_photo: req.body.emp_photo,
                     emp_email: req.body.emp_email,
-                    bank_branch :  mongoose.Types.ObjectId(req.body.bank_branch)
+                    bank_branch :  mongoose.Types.ObjectId(req.body.bank_branch),
+                    bank :  mongoose.Types.ObjectId(req.body.bank)
                 });
 
             if (!errors.isEmpty()) {
